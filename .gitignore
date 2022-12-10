@@ -1,3 +1,9 @@
+*.xlsx
+*.html
+\!Printesek
+\!Test
+\!_files
+
 # Logs
 logs
 *.log
