@@ -18,6 +18,7 @@ let o=1;
 let classOfAdditionalSection="float-left clear-both mb-1.5 uppercase text-gray-dark text-xs"
 let classOfOptions="text-dark bg-gray-lightest border-gray-lightest hover:bg-gray-light hover:border-gray-light py-1.25 px-4 mb-4 mr-4 text-left font-bold leading-snug border-4 rounded-5 max-w-full break-words print:border-none print:flex print:items-center print:mb-1";
 let classOfTrueOrFalse="w-full flex justify-center text-center break-words"
+let classOfMatching="p-3.5 flex justify-center flex-1 w-full break-words"
 
 //Finding out working directory
 const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +35,7 @@ filesSync.forEach(file => {
 	if(fileExtension===".html"){
 
 		let fileToOpen=file;
-		let outputBaseName=path.parse(fileToOpen).name
+		let outputBaseName="ntrmdt-"+path.parse(fileToOpen).name; //intermediate
 
 		console.log(fileToOpen+" -> "+outputBaseName);
 
@@ -112,6 +113,14 @@ function searchOf(json_object, path, outputBaseName){
 
 				//console.log(" -"+json_object.children[i].children[0].data);
 
+			} else if(json_object.children[i].attribs.class===classOfMatching){
+				// Then it is a matching question!
+				exerciese=exerciese+json_object.children[i].children[0].data+";"
+
+				// saving exerciese
+				actualQuestion.push(json_object.children[i].children[0].data);
+
+				//console.log(" -"+json_object.children[i].children[0].data);
 			} else if(json_object.children[i].attribs.class===classOfAdditionalSection){
 				// Then close this file
 				output(exerciese, outputBaseName);
