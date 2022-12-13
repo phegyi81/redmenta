@@ -45,7 +45,10 @@ filesSync.forEach(file => {
 		try{
 			arrIn.forEach(function (exerciese) {
 				let question=exerciese[0];
-				let qType=exerciese[1];
+				let point=exerciese[1];
+				let qType=exerciese[2];
+
+				let reserved=3;
 
 				let newExerciese=[];
 				newExerciese.push(orderNumber);
@@ -55,22 +58,32 @@ filesSync.forEach(file => {
 				if(qType==='r'){
 					// RÖVID VÁLASZ
 					let answers=" "
-					for(let i=1;i<=exerciese.length-2;i++){
+					for(let i=reserved;i<exerciese.length;i++){
 						if(answers.length>1){
 							answers+=" &&& ";
 						}
-						answers+=exerciese[i+1];
+						answers+=exerciese[i];
 					}
 					newExerciese.push(answers);
 
 					newExerciese.push("SZÖVEGES")
+
+					for(let i=1;i<=4;i++){
+						newExerciese.push("");
+					}
+					newExerciese.push(""); // OPCIOK
+
 				} else if(qType==='k'){
 					// KIFEJTŐS
 					newExerciese.push("");
 					newExerciese.push("SZABAD-SZÖVEGES")
+					for(let i=1;i<=4;i++){
+						newExerciese.push("");
+					}
+					newExerciese.push(""); // OPCIOK
 				} else if(/^[0-9]+$/.test(qType)){
 					// EGY OPCIÓS
-					let properAnswerPos = 1 + parseInt(qType);
+					let properAnswerPos = reserved-1 + parseInt(qType);
 					let properAnswer=exerciese[properAnswerPos]
 
 					newExerciese.push(properAnswer);
@@ -80,12 +93,12 @@ filesSync.forEach(file => {
 					}
 					
 					let wrongAnswers=""
-					for(let i=1;i<=exerciese.length-2;i++){
-						if(i!=parseInt(qType)){
+					for(let i=reserved;i<exerciese.length;i++){
+						if(i!=properAnswerPos){
 							if(wrongAnswers.length>0){
 								wrongAnswers+=" &&& ";
 							}
-							wrongAnswers+=exerciese[i+1];
+							wrongAnswers+=exerciese[i];
 						}
 					}
 					newExerciese.push(wrongAnswers);
@@ -98,7 +111,7 @@ filesSync.forEach(file => {
 						if(properAnswers.length>0){
 							properAnswers+=" &&& ";
 						}
-						let properAnswerPos = 1 + parseInt(pos);
+						let properAnswerPos = reserved-1 + parseInt(pos);
 						properAnswers+=exerciese[properAnswerPos];
 					});
 					
@@ -109,12 +122,13 @@ filesSync.forEach(file => {
 					}
 
 					let wrongAnswers=""
-					for(let i=1;i<=exerciese.length-2;i++){
-						if(!properAnswerPositions.has(i.toString())){
+					for(let i=reserved;i<exerciese.length;i++){
+						let propPosFormat=i-(reserved-1)
+						if(!properAnswerPositions.has(propPosFormat.toString())){
 							if(wrongAnswers.length>0){
 								wrongAnswers+=" &&& ";
 							}
-							wrongAnswers+=exerciese[i+1];
+							wrongAnswers+=exerciese[i];
 						}
 					}
 					newExerciese.push(wrongAnswers);
@@ -126,10 +140,10 @@ filesSync.forEach(file => {
 					for(let i=0;i<=qTypeUpper.length-1;i++){
 						switch(qTypeUpper.charAt(i)){
 							case 'I':
-								truePositions.add(i+1);
+								truePositions.add(i+reserved);
 								break;
 							case 'H':
-								falsePositions.add(i+1);
+								falsePositions.add(i+reserved);
 								break;
 							default:
 								throw "Not only I or H in true-false question type ->"+qType+"<-"
@@ -141,7 +155,7 @@ filesSync.forEach(file => {
 						if(properAnswers.length>0){
 							properAnswers+=" &&& ";
 						}
-						let properAnswerPos = 1 + parseInt(pos);
+						let properAnswerPos = parseInt(pos);
 						properAnswers+=exerciese[properAnswerPos];
 					});
 
@@ -157,7 +171,7 @@ filesSync.forEach(file => {
 						if(wrongAnswers.length>0){
 							wrongAnswers+=" &&& ";
 						}
-						let wrongAnswerPos = 1 + parseInt(pos);
+						let wrongAnswerPos = parseInt(pos);
 						wrongAnswers+=exerciese[wrongAnswerPos];
 					});
 
@@ -165,12 +179,27 @@ filesSync.forEach(file => {
 					
 				} else if(qType==='m'){
 					// PÁROSÍTÁS
+
+					newExerciese.push(""); // VALASZ
+					newExerciese.push("PÁROSÍTÓS");
+					for(let i=1;i<=4;i++){
+						newExerciese.push("");
+					}
+					newExerciese.push(""); // OPCIOK
+
 					console.log("Matching - NOT SUPPORTED by EDUBASE!!!");
 				} else {
 					// UNKNOWN
 					throw "Unknown or unfilled question type! ->"+qType+"<-"
 					//console.log(qType)
 				}
+
+				for(let i=1;i<=3;i++){
+					newExerciese.push("");
+				}
+				//POINTS
+				newExerciese.push(point);
+
 				arrOut.push(newExerciese);
 			});
 

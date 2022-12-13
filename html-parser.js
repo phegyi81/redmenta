@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 let exerciese=""
 let actualQuestion=[]
 let sheetOfQuestions=[]
+let pointsToGet=0
 let csvNeeded=0
 let consoleNeeded=0
 let q=1;
@@ -19,6 +20,7 @@ let classOfAdditionalSection="float-left clear-both mb-1.5 uppercase text-gray-d
 let classOfOptions="text-dark bg-gray-lightest border-gray-lightest hover:bg-gray-light hover:border-gray-light py-1.25 px-4 mb-4 mr-4 text-left font-bold leading-snug border-4 rounded-5 max-w-full break-words print:border-none print:flex print:items-center print:mb-1";
 let classOfTrueOrFalse="w-full flex justify-center text-center break-words"
 let classOfMatching="p-3.5 flex justify-center flex-1 w-full break-words"
+let classOfPoints="text-cream text-2xl font-bold w-16 h-8 text-center"
 
 //Finding out working directory
 const __filename = fileURLToPath(import.meta.url);
@@ -90,9 +92,10 @@ function searchOf(json_object, path, outputBaseName){
 				if(actualQuestion.length>0){
 					saveActualQuestion();
 				}
-				exerciese=json_object.children[i].children[0].data+";;";
+				exerciese=json_object.children[i].children[0].data+";"+pointsToGet+";;";
 				//console.log(q+". "+json_object.children[i].children[0].data);
 				actualQuestion.push(json_object.children[i].children[0].data);
+				actualQuestion.push(pointsToGet);
 				actualQuestion.push("");
 				q++
 			// Is the class the one belonging to the options?
@@ -139,6 +142,9 @@ function searchOf(json_object, path, outputBaseName){
 
 				sheetOfQuestions = [];
 				return 1;
+			} else if(json_object.children[i].attribs.class===classOfPoints){
+				pointsToGet=json_object.children[i].children[0].data;
+				//console.log(pointsToGet)
 			}
 		}
 		if (typeof json_object.children[i].children !== 'undefined'){
