@@ -10,7 +10,11 @@ import { writeFile, readFile, set_fs, utils } from "xlsx/xlsx.mjs";
 set_fs(fs);
 
 // Global values and variables
-
+const CellId = {
+    QUESTION:0,
+    POINT:1,
+    QTYPE:2
+}
 //Finding out working directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,11 +48,11 @@ filesSync.forEach(file => {
 
 		try{
 			arrIn.forEach(function (exerciese) {
-				let question=exerciese[0];
-				let point=exerciese[1];
-				let qType=exerciese[2];
+				let question=exerciese[CellId.QUESTION];
+				let point=exerciese[CellId.POINT];
+				let qType=exerciese[CellId.QTYPE];
 
-				let reserved=3;
+				let reserved=Object.keys(CellId).length;
 
 				let newExerciese=[];
 				newExerciese.push(orderNumber);
