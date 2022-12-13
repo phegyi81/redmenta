@@ -31,9 +31,16 @@ filesSync.forEach(file => {
 
 		console.log(file+" "+workbookIn.SheetNames[0]);
 
+		let orderNumber=1;
+
 		var arrIn = utils.sheet_to_json(worksheetIn, {header: 1});
 
-		var arrOut = []
+		var arrOut = [];
+
+		var header = ["", "KÉRDÉS", "VÁLASZ", "TÍPUS", "TÉMAKÖR", "KATEGÓRIA", "FŐKATEGÓRIA", "NYELV", "OPCIÓK", "MEGJEGYZÉS", "PRIVÁT_MEGJEGYZÉS", "MAGYARÁZAT", "PONT", "RÉSZPONTOZÁS", "RÉSZPONTOK", "KÉZI_ÉRTÉKELÉS", "BÜNTETŐPONT", "BÜNTETŐPONTOZÁS", "SEGÍTSÉG", "MEGOLDÁS", "MEGOLDÁS_KÉP", "FORRÁS", "CSOPORTOSÍTÁS", "CÍMKE", "VÁLASZ_ELVÁRÁS", "KÉRDÉS_FORMÁTUM", "KÉP", "MÉDIA_VIDEÓ", "MÉDIA_AUDIÓ", "NEHÉZSÉG", "PARAMÉTEREK", "MEGKÖTÉSEK", "FIX_OPCIÓK", "VÁLASZ_SORREND", "VÁLASZ_REJTETT", "VÁLASZ_CÍMKE", "VÁLASZ_INDEFINIT", "SZINKRON_PARAMÉTEREK", "PONTOSSÁG", "HIBATŰRÉS", "NUMERIKUS_TARTOMÁNY", "IGAZHAMIS_HARMADIK_OPCIÓK", "IGAZHAMIS_HARMADIK_OPCIÓK_FELIRAT", "DÁTUMIDŐ_PONTOSSÁG", "DÁTUMIDŐ_TARTOMÁNY", "SZABADSZÖVEG_KARAKTEREK", "KIFEJEZÉS_BŐVÍTETT", "KIFEJEZÉS_FÜGGVÉNYEK", "KIFEJEZÉS_VÁLTOZÓ", "SEGÍTSÉG_PONTLEVONÁS", "MEGOLDÁS_PONTLEVONÁS"
+];
+
+		arrOut.push(header);
 
 		try{
 			arrIn.forEach(function (exerciese) {
@@ -41,14 +48,15 @@ filesSync.forEach(file => {
 				let qType=exerciese[1];
 
 				let newExerciese=[];
-				newExerciese.push("");
+				newExerciese.push(orderNumber);
+				orderNumber++;
 				newExerciese.push(question);
 				
 				if(qType==='r'){
 					// RÖVID VÁLASZ
-					let answers=""
+					let answers=" "
 					for(let i=1;i<=exerciese.length-2;i++){
-						if(answers.length>0){
+						if(answers.length>1){
 							answers+=" &&& ";
 						}
 						answers+=exerciese[i+1];
