@@ -1,7 +1,9 @@
 {
  "type": "module",
  "dependencies": {
+  "docx": "^7.8.0",
   "fast-xml-parser": "^4.0.12",
+  "file-saver": "^2.0.5",
   "html-dom-parser": "^3.1.2",
   "iso-8859-2": "^3.0.4",
   "xlsx": "^0.18.5"
